@@ -13,7 +13,7 @@ import { FaUserCircle } from "react-icons/fa";
 const AccountContent = () => {
   const router = useRouter();
   const subscribeModal = useSubscribeModal();
-  const { isLoading, subscription, user } = useUser();
+  const { isLoading, subscription, user, userDetails } = useUser();
 
   const [loading, setLoading] = useState(false);
 
