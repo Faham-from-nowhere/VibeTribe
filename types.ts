@@ -40,7 +40,7 @@ export interface Playlist {
 
 export interface PlaylistSong {
   playlist_id: number;
-  song_id: number;
+  song_id: string;
   created_at: string;
 }
 

@@ -36,7 +36,7 @@ const PlaylistContent: React.FC<PlaylistContentProps> = ({ playlistId, songs }) 
     );
   }
 
-  const removeFromPlaylist = async (songId: number) => {
+  const removeFromPlaylist = async (songId: string) => {
     try {
       const { error } = await supabase
         .from('playlist_songs')
