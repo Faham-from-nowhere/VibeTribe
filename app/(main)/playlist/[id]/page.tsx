@@ -8,13 +8,14 @@ import { TbPlaylist } from "react-icons/tb";
 export const revalidate = 0;
 
 interface PlaylistProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 const PlaylistPage = async ({ params }: PlaylistProps) => {
-  const playlist = await getPlaylistById(params.id);
+  const { id } = await params;
+  const playlist = await getPlaylistById(id);
 
   if (!playlist) {
     return (
