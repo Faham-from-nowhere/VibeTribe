@@ -28,7 +28,8 @@ const nextConfig = {
       "onnxruntime-node$": false,
     }
     return config;
-  }
+  },
+  turbopack: {}
 };
 
 module.exports = nextConfig;
