@@ -188,68 +188,87 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   };
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 h-full">
-      <div className="flex w-full justify-start">
-        <div className="flex items-center gap-x-4">
+    <div className="relative h-full w-full">
+      {/* Global Waveform Background */}
+      <div className="absolute inset-0 w-full h-[80px] z-0 overflow-hidden opacity-30 md:opacity-100 pointer-events-none">
+        <div ref={waveformRef} className="absolute inset-0 w-full h-full cursor-pointer pointer-events-auto z-10" />
+        <AudioVisualizer audioElement={audioElement} isPlaying={isPlaying} />
+      </div>
+
+      <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 h-full pointer-events-none">
+        <div className="flex w-full justify-start items-center pointer-events-auto z-20">
           <MediaItem data={song} />
           <LikeButton songId={song.id} />
         </div>
-      </div>
 
-      <div className="flex md:hidden col-auto w-full justify-end items-center">
-        <div
-          onClick={handlePlay}
-          className="h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer"
-        >
-          <Icon size={30} className="text-black" />
-        </div>
-      </div>
-
-      <div className="hidden h-full md:flex justify-center items-center w-full max-w-[722px] px-4 relative">
-        {/* Waveform Background */}
-        <div className="absolute inset-0 w-full h-[80px] z-0">
-          <div ref={waveformRef} className="absolute inset-0 w-full h-full cursor-pointer z-10" />
-          <AudioVisualizer audioElement={audioElement} isPlaying={isPlaying} />
-        </div>
-        
-        {/* Playback Controls (Overlay) */}
-        <div className="relative flex justify-center items-center gap-x-6 z-20 pointer-events-auto">
+        {/* Mobile Controls */}
+        <div className="flex md:hidden col-auto w-full justify-end items-center gap-x-2 pr-1 pointer-events-auto z-20">
+          <button 
+            onClick={generateLyrics} 
+            disabled={isTranscribing}
+            className="text-[10px] bg-neutral-800 text-orange-500 px-2 py-1 rounded-full font-medium transition disabled:opacity-50"
+          >
+            {isTranscribing ? "AI..." : "✨ AI"}
+          </button>
           <AiFillStepBackward
-            size={24}
+            size={20}
             onClick={onPlayPrevious}
-            className="text-neutral-400 cursor-pointer hover:text-white transition"
+            className="text-neutral-400 cursor-pointer"
           />
           <div
             onClick={handlePlay}
-            className="flex items-center justify-center h-8 w-8 rounded-full bg-white p-1 cursor-pointer hover:scale-105 transition shadow-lg"
+            className="h-8 w-8 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer"
           >
             <Icon size={20} className="text-black" />
           </div>
           <AiFillStepForward
-            size={24}
+            size={20}
             onClick={onPlayNext}
-            className="text-neutral-400 cursor-pointer hover:text-white transition"
+            className="text-neutral-400 cursor-pointer"
           />
         </div>
-      </div>
 
-      <div className="hidden md:flex w-full justify-end pr-2 items-center">
-        <div className="flex items-center gap-x-2 w-[120px] mr-4">
-          <VolumeIcon
-            onClick={toggleMute}
-            className="cursor-pointer text-neutral-400 hover:text-white transition"
-            size={24}
-          />
-          <Slider value={volume} onChange={handleVolumeChange} />
+        {/* Desktop Center Controls */}
+        <div className="hidden h-full md:flex justify-center items-center w-full max-w-[722px] px-4 pointer-events-auto z-20">
+          <div className="flex justify-center items-center gap-x-6 bg-black/40 px-6 py-2 rounded-full backdrop-blur-sm shadow-xl border border-neutral-800">
+            <AiFillStepBackward
+              size={24}
+              onClick={onPlayPrevious}
+              className="text-neutral-400 cursor-pointer hover:text-white transition"
+            />
+            <div
+              onClick={handlePlay}
+              className="flex items-center justify-center h-8 w-8 rounded-full bg-white p-1 cursor-pointer hover:scale-105 transition shadow-lg"
+            >
+              <Icon size={20} className="text-black" />
+            </div>
+            <AiFillStepForward
+              size={24}
+              onClick={onPlayNext}
+              className="text-neutral-400 cursor-pointer hover:text-white transition"
+            />
+          </div>
         </div>
-        
-        <button 
-          onClick={generateLyrics} 
-          disabled={isTranscribing}
-          className="text-sm bg-neutral-800 text-orange-500 hover:bg-neutral-700 px-3 py-1 rounded-full font-medium transition disabled:opacity-50"
-        >
-          {isTranscribing ? `Loading AI (${transcribeProgress}%)` : lyrics ? "Hide Lyrics" : "✨ AI Lyrics"}
-        </button>
+
+        {/* Desktop Right Controls */}
+        <div className="hidden md:flex w-full justify-end pr-2 items-center pointer-events-auto z-20">
+          <div className="flex items-center gap-x-2 w-[120px] mr-4 bg-black/40 px-3 py-1.5 rounded-full backdrop-blur-sm border border-neutral-800">
+            <VolumeIcon
+              onClick={toggleMute}
+              className="cursor-pointer text-neutral-400 hover:text-white transition"
+              size={24}
+            />
+            <Slider value={volume} onChange={handleVolumeChange} />
+          </div>
+          
+          <button 
+            onClick={generateLyrics} 
+            disabled={isTranscribing}
+            className="text-sm bg-neutral-800 text-orange-500 hover:bg-neutral-700 px-4 py-1.5 rounded-full font-medium transition disabled:opacity-50 shadow-lg border border-neutral-700"
+          >
+            {isTranscribing ? `Loading AI (${transcribeProgress}%)` : lyrics ? "Hide Lyrics" : "✨ AI Lyrics"}
+          </button>
+        </div>
       </div>
 
       {/* AI Lyrics Panel Overlay */}
