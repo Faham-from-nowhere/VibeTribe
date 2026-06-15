@@ -6,6 +6,10 @@ import Image from "next/image";
 import { Song } from "@/types";
 import useLoadImage from "@/hooks/useLoadImage";
 import PlayButton from "./PlayButton";
+import { TbPlaylistAdd } from "react-icons/tb";
+import useAddToPlaylistModal from "@/hooks/useAddToPlaylistModal";
+import { useUser } from "@/hooks/useUser";
+import useAuthModal from "@/hooks/useAuthModal";
 
 interface SongItemProps {
   data: Song;
@@ -14,6 +18,15 @@ interface SongItemProps {
 
 const SongItem: React.FC<SongItemProps> = ({ data, onClick }) => {
   const imagePath = useLoadImage(data);
+  const addToPlaylistModal = useAddToPlaylistModal();
+  const { user } = useUser();
+  const authModal = useAuthModal();
+
+  const handleAdd = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!user) return authModal.onOpen();
+    addToPlaylistModal.onOpen(data.id);
+  }
 
   return (
     <div
@@ -35,7 +48,15 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick }) => {
           By {data.author}
         </p>
       </div>
-      <div className="absolute bottom-20 right-3">
+      <div className="absolute bottom-24 right-3 z-10">
+        <button 
+          onClick={handleAdd}
+          className="transition opacity-0 rounded-full flex items-center bg-emerald-500 p-2 drop-shadow-md translate translate-y-1/4 group-hover:opacity-100 group-hover:translate-y-0 hover:scale-110"
+        >
+          <TbPlaylistAdd className="text-black" size={20} />
+        </button>
+      </div>
+      <div className="absolute bottom-24 right-16 z-10">
         <PlayButton />
       </div>
     </div>

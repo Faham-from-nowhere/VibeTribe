@@ -4,6 +4,8 @@ import AuthModal from "@/components/AuthModal";
 import SubscribeModal from "@/components/SubscribeModal";
 import UploadModal from "@/components/UploadModal";
 import AIPromptModal from "@/components/AIPromptModal";
+import CreatePlaylistModal from "@/components/CreatePlaylistModal";
+import AddToPlaylistModal from "@/components/AddToPlaylistModal";
 
 import { ProductWithPrice } from "@/types";
 
@@ -28,6 +30,8 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ products }) => {
       <UploadModal />
       <AIPromptModal />
       <SubscribeModal products={products} />
+      <CreatePlaylistModal />
+      <AddToPlaylistModal />
     </>
   );
 };

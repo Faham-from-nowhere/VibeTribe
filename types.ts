@@ -30,6 +30,20 @@ export interface Product {
   metadata?: Stripe.Metadata;
 }
 
+export interface Playlist {
+  id: number;
+  user_id: string;
+  name: string;
+  image_path?: string;
+  created_at: string;
+}
+
+export interface PlaylistSong {
+  playlist_id: number;
+  song_id: number;
+  created_at: string;
+}
+
 export interface Price {
   id: string;
   product_id?: string;

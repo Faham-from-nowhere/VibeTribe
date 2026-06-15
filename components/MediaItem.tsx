@@ -7,6 +7,10 @@ import { Song } from "@/types";
 
 import React from "react";
 import Image from "next/image";
+import { TbPlaylistAdd } from "react-icons/tb";
+import useAddToPlaylistModal from "@/hooks/useAddToPlaylistModal";
+import { useUser } from "@/hooks/useUser";
+import useAuthModal from "@/hooks/useAuthModal";
 
 interface MediaItemProps {
   data: Song;
@@ -16,12 +20,21 @@ interface MediaItemProps {
 const MediaItem: React.FC<MediaItemProps> = ({ data, onClick }) => {
   const player = usePlayer();
   const imageUrl = useLoadImage(data);
+  const addToPlaylistModal = useAddToPlaylistModal();
+  const { user } = useUser();
+  const authModal = useAuthModal();
 
   const handleClick = () => {
     if (onClick) return onClick(data.id);
 
     return player.setId(data.id);
   };
+
+  const handleAdd = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!user) return authModal.onOpen();
+    addToPlaylistModal.onOpen(data.id);
+  }
 
   return (
     <div
@@ -37,10 +50,16 @@ const MediaItem: React.FC<MediaItemProps> = ({ data, onClick }) => {
           className="object-cover"
         />
       </div>
-      <div className="flex flex-col gap-y-1 overflow-hidden">
+      <div className="flex flex-col gap-y-1 overflow-hidden flex-1">
         <p className="text-white truncate">{data.title}</p>
         <p className="text-neutral-400 text-sm truncate">{data.author}</p>
       </div>
+      <button 
+        onClick={handleAdd}
+        className="text-neutral-400 hover:text-white transition p-2"
+      >
+        <TbPlaylistAdd size={20} />
+      </button>
     </div>
   );
 };
