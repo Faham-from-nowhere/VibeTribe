@@ -6,6 +6,7 @@ import { twMerge } from "tailwind-merge";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { HiHome } from "react-icons/hi";
 import { BiSearch } from "react-icons/bi";
+import { FiMenu } from "react-icons/fi";
 import { createClient } from "@/libs/supabase/client";
 import { FaUserAlt } from "react-icons/fa";
 import { toast } from "react-hot-toast";
@@ -16,6 +17,7 @@ import useAuthModal from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
 import usePlayer from "@/hooks/usePlayer";
 import useAIPromptModal from "@/hooks/useAIPromptModal";
+import useMobileMenu from "@/hooks/useMobileMenu";
 
 interface HeaderProps {
   children: React.ReactNode;
@@ -26,6 +28,7 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
   const player = usePlayer();
   const authModal = useAuthModal();
   const aiPromptModal = useAIPromptModal();
+  const mobileMenu = useMobileMenu();
   const router = useRouter();
 
   const supabaseClient = createClient();
@@ -69,7 +72,13 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
         </div>
 
         <div className="flex md:hidden gap-x-2 items-center">
-          <button onClick={() => router.push('/listen')} className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-75 transition">
+          <button 
+            onClick={mobileMenu.onOpen} 
+            className="rounded-full p-2 bg-transparent flex items-center justify-center hover:opacity-75 transition"
+          >
+            <FiMenu size={28} className="text-white" />
+          </button>
+          <button onClick={() => router.push('/listen')} className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-75 transition ml-2">
             <HiHome size={20} className="text-black" />
           </button>
           <button onClick={() => router.push('/search')} className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-75 transition">
